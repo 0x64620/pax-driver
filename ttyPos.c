@@ -1,7 +1,7 @@
 #include "ttyPos.h"
 
-#define DRV_VERSION	"315"
-#define VERSION_DATE    "2018.09.26_10"
+#define DRV_VERSION	"316"
+#define VERSION_DATE    "2026.02.04_01"
 #define MAX_RETRY_S	5
 #define DRV_NAME	"ttyPos"
 
@@ -326,7 +326,7 @@ static int ThreadProcessing(void *data)
 
 	if(pdx==NULL)
 	{
-		do_exit(0);
+		return -EINVAL;
 	}
 
 	tty = pdx->tty;
@@ -702,11 +702,11 @@ static int ThreadProcessing(void *data)
 		}
 	}
 
-    local_irq_save(flags);
+	local_irq_save(flags);
 	pdx->ThreadState = THREAD_INIT;
-    local_irq_restore(flags);
+	local_irq_restore(flags);
 	INFO("ThreadProcessing Exit\n");
-	do_exit(0);
+	return 0;
 }
 
 static void pos_delete(struct kref *kref)
@@ -1543,7 +1543,7 @@ module_init(pos_tty_init);
 module_exit(pos_tty_exit);
 
 MODULE_LICENSE("GPL");
+MODULE_DESCRIPTION("USB POS tty driver");
 MODULE_VERSION(DRV_VERSION);
 MODULE_ALIAS_LDISC(N_SLIP);
-
 
